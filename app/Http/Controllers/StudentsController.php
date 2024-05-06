@@ -9,9 +9,10 @@ class StudentsController extends Controller{
 
     public function index(){
     $students = Students::all();
+    
     return Inertia::render('Students/Index',['students'=>$students]);
     }
-   
+    
     public function store(Request $request){
     $request -> validate([
         'Nombre'=>'required|max:60',
