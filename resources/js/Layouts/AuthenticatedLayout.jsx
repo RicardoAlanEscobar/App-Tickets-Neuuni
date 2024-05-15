@@ -31,7 +31,7 @@ export default function Authenticated({ user, header, children }) {
                                 </NavLink>
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('students.index')} active={route().current('students.index')}>
+                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Tickets
                                 </NavLink>
                             </div>
@@ -111,6 +111,7 @@ export default function Authenticated({ user, header, children }) {
                             Estudiantes
                         </ResponsiveNavLink>
                     </div>
+        
                     
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">

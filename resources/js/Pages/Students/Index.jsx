@@ -7,14 +7,12 @@ import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
-
 import { useForm } from '@inertiajs/react';
 import { Head } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import WarningButton from '@/Components/WarningButton';
 import DeleteButtom from '@/Components/DeleteButton';
 import Swal from 'sweetalert2';
-
 
 export default function Dashboard({ auth, students, props }) {
     const [modal,setModal] = useState(false);
@@ -43,8 +41,52 @@ export default function Dashboard({ auth, students, props }) {
         const closeModal=()=>{
             setModal(false);
         }
-        const save=()=>{
-            
+        const save=(e)=>{
+        e.preventDefault();
+        if(operation === 1){
+           post(route('students.store'),{
+            onSucces: () =>{ok('Guardado')},
+            onError: ()=>{
+               if(errors.nombre){
+                reset('nombre');
+                NombreInput.current.focus();
+               }
+               if(errors.email){
+                reset('email');
+                EmailInput.current.focus();
+               }
+               if(errors.tel){
+                reset('tel');
+                TelInput.current.focus();
+               }
+            }
+           });
+        }
+        else{
+          put(route('students.update',data.id),{
+            onSucces: () =>{ok('Modificado')},
+            onError: ()=>{
+               if(errors.nombre){
+                reset('nombre');
+                NombreInput.current.focus();
+               }
+               if(errors.email){
+                reset('email');
+                EmailInput.current.focus();
+               }
+               if(errors.tel){
+                reset('tel');
+                TelInput.current.focus();
+               }
+            }
+           });
+        }
+
+        }
+        const ok = (mensaje) => {
+          reset();
+          closeModal();
+          Swal.fire({title:mensaje, icon:'success'});
         }
     return (
         
@@ -53,14 +95,14 @@ export default function Dashboard({ auth, students, props }) {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Estudiantes</h2>}
         >
             <Head title="Estudiantes" />
-            <div className="bg-white grid v-screen place-items-center">
+            <div className=" grid v-screen place-items-center">
                 <div className='mt-3 mb-3 flex justify-end'>
                 < PrimaryButton onClick={()=>openModal(1)}> 
                     <i className='fa-solid fa-plus-circle'></i>
                      Añadir
                     </ PrimaryButton >
                 </div>
-            <div className="bg-white grid v-screen place-items-center py-6">
+            <div className="bg-white grid v-screen place-items-center ">
                <table className='table-auto border border-gray-400'>
                  <thead>
                     <tr className='bg-gray-100'>
@@ -98,16 +140,41 @@ export default function Dashboard({ auth, students, props }) {
             </div>
             </div>
             <Modal show={modal} onClose={closeModal}>
-                <form onSubmit={save} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
+               <h2 className="p-8 text-lg font-medium text-gray-900">
+                        {title}
                     </h2>
+                <form onSubmit={save} className="p-6">
+                    <div className='mt-6'>
+                     <InputLabel for="nombre" value="Nombre:"></InputLabel>
+                     <TextInput id="nombre" name="nombre" ref={NombreInput} 
+                     value={data.Nombre} required='required'
+                     handleChange={(e)=>setData('nombre',e.target.value)} 
+                     className="mt-1 block w-full" isFocused></TextInput>
+                     <InputError message={errors.nombre} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                     <InputLabel for="email" value="Email:"></InputLabel>
+                     <TextInput id="email" name="email" ref={EmailInput} 
+                     value={data.Email} required='required'
+                     handleChange={(e)=>setData('email',e.target.value)} 
+                     className="mt-1 block w-full" ></TextInput>
+                     <InputError message={errors.email} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                     <InputLabel for="tel" value="Telefono:"></InputLabel>
+                     <TextInput id="tel" name="tel" ref={TelInput} 
+                     value={data.Tel} required='required'
+                     handleChange={(e)=>setData('tel',e.target.value)} 
+                     className="mt-1 block w-full"></TextInput>
+                     <InputError message={errors.tel} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                      <PrimaryButton processing={processing} className='mt-7 flex justify-end'>
+                        <i className='fa-solid fa-save ' ></i> Guardar
+                      </PrimaryButton>
+                    </div>
                     <div className="mt-6 flex justify-end">
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
-                        </DangerButton>
                     </div>
                 </form>
             </Modal>
