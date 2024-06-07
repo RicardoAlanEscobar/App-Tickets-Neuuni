@@ -15,9 +15,10 @@ class StudentsController extends Controller{
     
     public function store(Request $request){
     $request -> validate([
-        'Nombre'=>'required|max:60',
-        'Email'=>'required|max:30',
+        'Nombre'=>'required|max:100',
+        'Email'=>'required|max:100',
         'Tel'=>'required|max:13',
+        'Carrera'=>'required|max:100',
     ]);
     $student = new Students($request->input());
     $student -> save();
@@ -28,7 +29,9 @@ class StudentsController extends Controller{
     $student = Students::find($id);
     $student ->fill($request->input())->saveOrFail();
     return redirect('students');
+
     }
+    
     public function destroy($id){
         $student = Students::find($id);
         $student->delete();

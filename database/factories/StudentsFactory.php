@@ -14,6 +14,7 @@ class StudentsFactory extends FactoriesFactory
    return[
         'Nombre'=> $this -> faker -> company,
          'Email'=> $this ->faker -> text(15),
+         'Carrera'=> $this ->faker -> text(15),
          'Tel' => $this ->faker -> randomElement($TelColor)
    ];
   } 
